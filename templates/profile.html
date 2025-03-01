@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg p-4 text-center" style="max-width: 500px; margin: auto; border-radius: 12px;">
+        <h2 class="fw-bold text-primary">@{{ user.username }}</h2>
+
+        <!-- Profile Picture -->
+        <div class="mt-3">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle img-fluid border shadow-sm" 
+                     style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <p class="text-muted">No profile picture uploaded</p>
+            {% endif %}
+        </div>
+
+        <!-- Bio -->
+        <div class="mt-3">
+            <p class="text-muted"><strong>Bio:</strong> {{ user.bio|default:"No bio available" }}</p>
+        </div>
+
+        <!-- Edit Profile Button -->
+        <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mt-3">Edit Profile</a>
+    </div>
+</div>
+
+<style>
+    /* Profile Page Styling */
+    .card {
+        background: #fff;
+        border: none;
+    }
+
+    .rounded-circle {
+        border: 3px solid #007bff;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-size: 1.1rem;
+    }
+</style>
+
+{% endblock %}
