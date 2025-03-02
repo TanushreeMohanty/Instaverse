@@ -48,6 +48,7 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'feed' %}">Feed</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'create_post' %}">New Post</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}">Inbox</a></li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}">
                                 {% if user.profile_picture %}

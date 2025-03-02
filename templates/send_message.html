@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📤 Share Post via Direct Message</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-3 mb-3 shadow post-card">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-fluid rounded">
+                {% endif %}
+                <p class="mt-2">
+                    <strong>@{{ post.user.username }}</strong>: {{ post.caption }}
+                </p>
+            </div>
+
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="receiver" class="form-label">👤 Send to:</label>
+                        {{ form.receiver }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">💬 Message (optional):</label>
+                        {{ form.message }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">📩 Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h2 {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .post-card {
+        background: white;
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .post-card:hover {
+        transform: scale(1.02);
+    }
+
+    .shadow-sm {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+</style>
+{% endblock %}

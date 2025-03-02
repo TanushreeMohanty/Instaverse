@@ -39,6 +39,9 @@
                 <span class="like-count ms-2">{{ post.total_likes }}</span> likes
             </div>
 
+            <!-- Share Post Button -->
+            <a href="{% url 'send_message' post.id %}" class="btn btn-sm btn-info">Share</a>
+
             <!-- Edit & Delete buttons (only for post owner) -->
             {% if post.user == request.user %}
                 <div class="d-flex mt-2">

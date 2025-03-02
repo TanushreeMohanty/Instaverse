@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post
-from .forms import PostForm
+from .models import Post,DirectMessage
+from .forms import PostForm,DirectMessageForm
 from django.http import JsonResponse
 
 def home(request):
@@ -62,3 +62,26 @@ def like_unlike_post(request, post_id):
         liked = True
 
     return JsonResponse({"liked": liked, "total_likes": post.total_likes()})
+
+@login_required
+def send_message(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == "POST":
+        form = DirectMessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.post = post
+            message.save()
+            return redirect('inbox')  # Redirect to inbox after sending message
+
+    else:
+        form = DirectMessageForm()
+
+    return render(request, 'send_message.html', {'form': form, 'post': post})
+
+@login_required
+def inbox(request):
+    messages = DirectMessage.objects.filter(receiver=request.user).order_by('-timestamp')
+    return render(request, 'inbox.html', {'messages': messages})

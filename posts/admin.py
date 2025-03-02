@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, DirectMessage  # ✅ Import DirectMessage model
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -26,3 +26,21 @@ class PostAdmin(admin.ModelAdmin):
         return obj.likes.count()
 
     total_likes.short_description = 'Total Likes'
+
+
+@admin.register(DirectMessage)
+class DirectMessageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'sender', 'receiver', 'post', 'message', 'timestamp')
+    list_filter = ('timestamp', 'sender', 'receiver')
+    search_fields = ('sender__username', 'receiver__username', 'message')
+    readonly_fields = ('timestamp',)
+    ordering = ('-timestamp',)
+
+    fieldsets = (
+        ('Message Details', {
+            'fields': ('sender', 'receiver', 'message', 'post')
+        }),
+        ('Timestamps', {
+            'fields': ('timestamp',),
+        }),
+    )
