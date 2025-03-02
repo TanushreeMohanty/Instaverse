@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post
 from .forms import PostForm
+from django.http import JsonResponse
 
 def home(request):
     return render(request, 'home.html')
@@ -48,3 +49,16 @@ def delete_post(request, post_id):
         return redirect('feed')
 
     return render(request, 'delete_post.html', {'post': post})
+
+@login_required
+def like_unlike_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)  # Unlike
+        liked = False
+    else:
+        post.likes.add(request.user)  # Like
+        liked = True
+
+    return JsonResponse({"liked": liked, "total_likes": post.total_likes()})

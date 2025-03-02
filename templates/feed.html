@@ -27,6 +27,18 @@
 
             <p class="mt-2">{{ post.caption }}</p>
 
+            <!-- Like Button -->
+            <div class="d-flex align-items-center mt-2">
+                <button class="btn btn-like" data-post-id="{{ post.id }}">
+                    {% if user in post.likes.all %}
+                        ❤️ Liked
+                    {% else %}
+                        🤍 Like
+                    {% endif %}
+                </button>
+                <span class="like-count ms-2">{{ post.total_likes }}</span> likes
+            </div>
+
             <!-- Edit & Delete buttons (only for post owner) -->
             {% if post.user == request.user %}
                 <div class="d-flex mt-2">
@@ -42,6 +54,37 @@
         <p class="text-center text-muted">No posts available. <a href="{% url 'create_post' %}" class="text-primary">Create one</a></p>
     {% endfor %}
 </div>
+
+<!-- AJAX for Like/Unlike -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-like").forEach(button => {
+            button.addEventListener("click", function () {
+                let postId = this.getAttribute("data-post-id");
+                let likeBtn = this;
+                let likeCount = likeBtn.nextElementSibling;
+
+                fetch(`/posts/like/${postId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        likeBtn.innerHTML = "❤️ Liked";
+                    } else {
+                        likeBtn.innerHTML = "🤍 Like";
+                    }
+                    likeCount.innerHTML = data.total_likes;
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    });
+</script>
 
 <style>
     /* Glassmorphism Card */
@@ -86,9 +129,21 @@
     }
 
     /* Buttons */
-    .btn-warning, .btn-danger {
+    .btn-warning, .btn-danger, .btn-like {
         font-weight: bold;
         border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-like {
+        background-color: transparent;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .btn-like:hover {
+        transform: scale(1.1);
     }
 
     /* Responsive Design */
