@@ -49,6 +49,12 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'feed' %}">Feed</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'create_post' %}">New Post</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'inbox' %}">Inbox</a></li>
+                        
+                        <!-- 📌 Story Features -->
+                        <li class="nav-item"><a class="nav-link" href="{% url 'create_story' %}">➕ Add Story</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'show_stories' %}">📖 View Stories</a></li>
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}">
                                 {% if user.profile_picture %}

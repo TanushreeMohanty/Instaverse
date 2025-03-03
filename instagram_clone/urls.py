@@ -9,7 +9,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('users/', include('users.urls')),
     path('posts/', include('posts.urls')),
-    # path('stories/', include('stories.urls')),
+    path('stories/', include('stories.urls')),
 ]
 
 if settings.DEBUG:

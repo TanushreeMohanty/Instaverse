@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card upload-card shadow-lg">
+        <div class="card-body">
+            <h2 class="text-center mb-4">📤 Upload Your Story</h2>
+            
+            <form method="post" enctype="multipart/form-data" class="story-form">
+                {% csrf_token %}
+                {{ form.as_p }} 
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">🚀 Upload Story</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+    /* Center the card in the viewport */
+    .upload-card {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 15px;
+        background: #fff;
+        text-align: center;
+    }
+
+    /* Styling for form elements */
+    .form-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+
+    /* Button animation */
+    .btn-primary {
+        transition: all 0.3s ease-in-out;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background: #007bff;
+        transform: scale(1.05);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        .upload-card {
+            width: 90%;
+        }
+    }
+</style>
+
+
+{% endblock %}
