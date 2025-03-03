@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center text-gradient">🔖 Saved Posts</h2>
+
+    {% if bookmarks %}
+        <div class="row">
+            {% for bookmark in bookmarks %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card glass-card p-3 mb-4">
+                        <!-- User Info -->
+                        <div class="d-flex align-items-center">
+                            <img src="{{ bookmark.post.user.profile_picture.url }}" class="profile-pic me-2">
+                            <h5 class="fw-bold">@{{ bookmark.post.user.username }}</h5>
+                        </div>
+
+                        <!-- Post Content -->
+                        <p class="mt-2">{{ bookmark.post.caption }}</p>
+
+                        <!-- Post Image -->
+                        {% if bookmark.post.image %}
+                            <img src="{{ bookmark.post.image.url }}" class="img-fluid rounded post-img">
+                        {% endif %}
+
+                        <!-- Remove Bookmark Button -->
+                        <div class="text-end mt-3">
+                            <a href="{% url 'bookmark_post' bookmark.post.id %}" class="btn btn-remove">
+                                ❌ Remove
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted text-center">You haven't saved any posts yet!</p>
+    {% endif %}
+</div>
+
+<style>
+    /* Gradient Text */
+    .text-gradient {
+        background: linear-gradient(45deg, #C65BCF, #874CCC, #F27BBD);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+
+    /* Glassmorphism Card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Hover Effect */
+    .glass-card:hover {
+        transform: scale(1.05);
+    }
+
+    /* Profile Picture */
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #874CCC;
+    }
+
+    /* Post Image */
+    .post-img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .post-img:hover {
+        transform: scale(1.03);
+    }
+
+    /* Remove Bookmark Button */
+    .btn-remove {
+        background-color: transparent;
+        color: #ff4d4d;
+        font-weight: bold;
+        border: 1px solid #ff4d4d;
+        padding: 5px 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-remove:hover {
+        background-color: #ff4d4d;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .profile-pic {
+            width: 35px;
+            height: 35px;
+        }
+
+        .post-img {
+            max-height: 250px;
+        }
+    }
+</style>
+{% endblock %}

@@ -57,6 +57,10 @@
                                 {{ user.username }}
                             </a>
                         </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'saved_posts' %}">🔖 Saved</a></li>
+                        {% endif %}
+
                         <li class="nav-item">
                             <a class="nav-link btn btn-danger btn-sm text-white" href="{% url 'logout' %}">Logout</a>
                         </li>

@@ -27,8 +27,8 @@
 
             <p class="mt-2">{{ post.caption }}</p>
 
-            <!-- Like Button -->
-            <div class="d-flex align-items-center mt-2">
+        <!-- Like & Bookmark Buttons -->
+        <div class="d-flex align-items-center mt-2">
                 <button class="btn btn-like" data-post-id="{{ post.id }}">
                     {% if user in post.likes.all %}
                         ❤️ Liked
@@ -37,6 +37,14 @@
                     {% endif %}
                 </button>
                 <span class="like-count ms-2">{{ post.total_likes }}</span> likes
+
+                <button class="btn btn-bookmark ms-auto" data-post-id="{{ post.id }}">
+                    {% if post in user.bookmark_set.all %}
+                        🔖 Saved
+                    {% else %}
+                        📌 Save
+                    {% endif %}
+                </button>
             </div>
 
             <!-- Share Post Button -->
@@ -87,6 +95,35 @@
             });
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".btn-bookmark").forEach(button => {
+            button.addEventListener("click", function () {
+                let postId = this.getAttribute("data-post-id");
+                let bookmarkBtn = this;
+    
+                fetch(`/posts/bookmark/${postId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.saved) {
+                        bookmarkBtn.innerHTML = "🔖 Saved";
+                    } else {
+                        bookmarkBtn.innerHTML = "📌 Save";
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
+    });
+    
+    
 </script>
 
 <style>
@@ -164,5 +201,19 @@
             max-height: 300px;
         }
     }
+
+        /* Bookmark Button */
+    .btn-bookmark {
+        background-color: transparent;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+    .btn-bookmark:hover {
+        transform: scale(1.1);
+    }
+
 </style>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post,DirectMessage
+from .models import Post,DirectMessage,Bookmark
 from .forms import PostForm,DirectMessageForm
 from django.http import JsonResponse
 
@@ -85,3 +85,24 @@ def send_message(request, post_id):
 def inbox(request):
     messages = DirectMessage.objects.filter(receiver=request.user).order_by('-timestamp')
     return render(request, 'inbox.html', {'messages': messages})
+
+@login_required
+def bookmark_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    bookmark, created = Bookmark.objects.get_or_create(user=request.user, post=post)
+
+    if created:
+        saved = True  # If a new bookmark was created, mark as saved
+    else:
+        bookmark.delete()  # If already saved, remove it (toggle feature)
+        saved = False  # Mark as unsaved
+
+    # Handle both AJAX & normal requests
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"saved": saved})
+
+    return redirect(request.META.get("HTTP_REFERER", "feed"))  # Redirect back to the previous page or feed
+@login_required
+def saved_posts(request):
+    bookmarks = Bookmark.objects.filter(user=request.user).select_related('post')
+    return render(request, 'saved_posts.html', {'bookmarks': bookmarks})
