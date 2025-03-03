@@ -11,7 +11,9 @@
                     <div class="card glass-card p-3 mb-4">
                         <!-- User Info -->
                         <div class="d-flex align-items-center">
-                            <img src="{{ bookmark.post.user.profile_picture.url }}" class="profile-pic me-2">
+                            {% if bookmark.post.user.profile_picture %}
+                                <img src="{{ bookmark.post.user.profile_picture.url }}" class="profile-pic me-2">
+                            {% endif %}
                             <h5 class="fw-bold">@{{ bookmark.post.user.username }}</h5>
                         </div>
 

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import feed, create_post, edit_post, delete_post,like_unlike_post,send_message,inbox,bookmark_post,saved_posts
+from .views import feed, create_post, edit_post, delete_post,like_unlike_post,send_message,inbox,bookmark_post,saved_posts,report_post
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -13,5 +13,6 @@ urlpatterns = [
     path('inbox/', inbox, name='inbox'),
     path('bookmark/<int:post_id>/', bookmark_post, name='bookmark_post'),
     path('saved/', saved_posts, name='saved_posts'),
+    path('post/<int:post_id>/report/', report_post, name='report_post'),
 
 ]

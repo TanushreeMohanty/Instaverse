@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post,DirectMessage,Bookmark
-from .forms import PostForm,DirectMessageForm
+from .models import Post,DirectMessage,Bookmark,Report
+from .forms import PostForm,DirectMessageForm,ReportForm
 from django.http import JsonResponse
+from django.contrib import messages
 
 def home(request):
     return render(request, 'home.html')
@@ -106,3 +107,22 @@ def bookmark_post(request, post_id):
 def saved_posts(request):
     bookmarks = Bookmark.objects.filter(user=request.user).select_related('post')
     return render(request, 'saved_posts.html', {'bookmarks': bookmarks})
+
+@login_required
+def report_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.method == "POST":
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.user = request.user
+            report.post = post
+            report.save()
+            messages.success(request, "Your report has been submitted.")
+            return redirect('feed')  # Redirect to the feed or another page
+
+    else:
+        form = ReportForm()
+
+    return render(request, 'report_post.html', {'form': form, 'post': post})

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center text-danger">🚩 Report Post</h2>
+
+    <div class="card p-3 shadow-lg">
+        <p><strong>@{{ post.user.username }}</strong>: {{ post.caption }}</p>
+
+        {% if post.image %}
+            <img src="{{ post.image.url }}" class="img-fluid rounded">
+        {% endif %}
+    </div>
+
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        <label for="id_reason" class="fw-bold">Reason:</label>
+        {{ form.reason }}
+        
+        <label for="id_description" class="fw-bold mt-2">Additional Details:</label>
+        {{ form.description }}
+
+        <button type="submit" class="btn btn-danger w-100 mt-3">Submit Report</button>
+    </form>
+</div>
+{% endblock %}

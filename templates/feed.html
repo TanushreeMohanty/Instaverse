@@ -9,7 +9,9 @@
     {% for post in posts %}
         <div class="card mb-4 p-3 shadow-lg glass-card">
             <div class="d-flex align-items-center">
-                <img src="{{ post.user.profile_picture.url }}" class="profile-pic me-2">
+                {% if post.user.profile_picture %}
+                    <img src="{{ post.user.profile_picture.url }}" class="profile-pic me-2">
+                {% endif %}
                 <h5 class="fw-bold">@{{ post.user.username }}</h5>
                 <span class="text-muted ms-auto">{{ post.created_at|date:"F j, Y" }}</span>
             </div>
@@ -49,6 +51,9 @@
 
             <!-- Share Post Button -->
             <a href="{% url 'send_message' post.id %}" class="btn btn-sm btn-info">Share</a>
+
+            <!-- Report Button -->
+            <a href="{% url 'report_post' post.id %}" class="btn btn-sm btn-warning">🚩 Report</a>
 
             <!-- Edit & Delete buttons (only for post owner) -->
             {% if post.user == request.user %}
